@@ -2,12 +2,412 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Veille IA</title>
-  <style>body{font-family:sans-serif;max-width:800px;margin:40px auto;padding:0 20px;}h1{color:#6366f1;}a{color:#6366f1;}</style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Veille IA — Rapports quotidiens</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --bg: #0a0e1a;
+      --surface: #111827;
+      --card: #1a2236;
+      --card-hover: #1f2b45;
+      --accent: #6366f1;
+      --accent-glow: rgba(99, 102, 241, 0.3);
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --border: #1e293b;
+      --green: #10b981;
+      --orange: #f59e0b;
+      --red: #ef4444;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Header */
+    header {
+      padding: 60px 0 40px;
+      text-align: center;
+      position: relative;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: var(--accent);
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 0.85em;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .badge .dot {
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    h1 {
+      font-size: 3em;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 1.15em;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Stats bar */
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      padding: 30px 0;
+      margin-top: 30px;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 2em;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 0.8em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    /* Reports section */
+    .section-title {
+      font-size: 1.5em;
+      font-weight: 700;
+      margin: 50px 0 24px;
+      padding-left: 16px;
+      border-left: 4px solid var(--accent);
+    }
+
+    .report-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .report-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--accent), #8b5cf6);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .report-card:hover {
+      background: var(--card-hover);
+      border-color: rgba(99, 102, 241, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(99, 102, 241, 0.15);
+    }
+
+    .report-card:hover::before {
+      opacity: 1;
+    }
+
+    .report-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .report-date {
+      font-size: 0.85em;
+      color: var(--text-dim);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .report-title {
+      font-size: 1.35em;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .report-summary {
+      color: var(--text-muted);
+      font-size: 0.95em;
+      line-height: 1.8;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      background: rgba(99, 102, 241, 0.12);
+      color: #a5b4fc;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 0.8em;
+      font-weight: 500;
+    }
+
+    .tag.green { background: rgba(16, 185, 129, 0.12); color: #6ee7b7; }
+    .tag.orange { background: rgba(245, 158, 11, 0.12); color: #fcd34d; }
+
+    /* Report detail */
+    .report-detail {
+      display: none;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .report-detail.active {
+      display: block;
+    }
+
+    .report-detail h3 {
+      color: var(--accent);
+      font-size: 1.1em;
+      margin: 20px 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .report-detail p {
+      color: var(--text-muted);
+      font-size: 0.92em;
+      margin-bottom: 10px;
+    }
+
+    .report-detail .source {
+      color: var(--text-dim);
+      font-size: 0.82em;
+      margin-bottom: 16px;
+      padding-left: 12px;
+      border-left: 2px solid var(--border);
+    }
+
+    .report-detail a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .report-detail a:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 60px;
+      padding: 30px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.85em;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Toggle button */
+    .toggle-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85em;
+      transition: all 0.2s ease;
+    }
+
+    .toggle-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 2em; }
+      .stats { gap: 20px; flex-wrap: wrap; }
+      .report-header { flex-direction: column; gap: 8px; }
+    }
+  </style>
 </head>
 <body>
-  <h1>Veille IA — 24 novembre 2026</h1>
-  <p>Rapport disponible : <a href="rapports/2026-11-24.md">Lire le rapport complet</a></p>
-  <p><em>Le site complet avec mise en page soignée arrive bientôt.</em></p>
+  <div class="container">
+    <header>
+      <div class="badge"><span class="dot"></span> Automatisation par Nod</div>
+      <h1>Veille IA</h1>
+      <p class="subtitle">Briefing technique quotidien sur l'actualité de l'Intelligence Artificielle — modèles propriétaires et open source/open weight. Fenêtre stricte des 24-36 dernières heures.</p>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-value">1</div>
+          <div class="stat-label">Rapports publiés</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">10</div>
+          <div class="stat-label">Actus couvertes</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">24h</div>
+          <div class="stat-label">Fenêtre stricte</div>
+        </div>
+      </div>
+    </header>
+
+    <h2 class="section-title">Rapports</h2>
+
+    <div class="report-card" onclick="toggleReport(this)">
+      <div class="report-header">
+        <div>
+          <div class="report-date">MARDI 24 NOVEMBRE 2026</div>
+          <div class="report-title">Veille IA — 24 novembre 2026</div>
+        </div>
+        <button class="toggle-btn">Lire le rapport</button>
+      </div>
+      <div class="report-summary">
+        GLM-5.4 (Z.ai) · Claude VP≠VNP (Anthropic) · Shirudo (OpenAI+Cisco) · Claude Ship · Poursuite vs xAI · Inkling 2 Mini · marvy-2-35B-MoE · PrunedHub GPT-OSS · DeepSeek-MoE-16B · TML-d24-varloop
+      </div>
+      <div class="tags">
+        <span class="tag">GLM-5.4</span>
+        <span class="tag">Anthropic</span>
+        <span class="tag green">Inkling 2 Mini</span>
+        <span class="tag green">Open Source</span>
+        <span class="tag orange">SecOps</span>
+      </div>
+
+      <div class="report-detail" id="report-2026-11-24">
+        <h3>🌐 1. Veille Technologie IA (Actu & tendances)</h3>
+
+        <p><strong>1. Z.ai lance GLM-5.4, un Loop Transformer de 750B paramètres avec vision</strong></p>
+        <p>Z.ai a sorti GLM-5.4 le 23 novembre 2026, son premier modèle flagship basé sur une architecture Loop Transformer. 750 milliards de paramètres, 28 de ses 78 couches bouclées 2x par passe avant (+36% de profondeur sans paramètres supplémentaires). Vision ajoutée pour la première fois à la famille GLM. 1,5x le quota hebdomadaire vs GLM-5.3.</p>
+        <p class="source">Sources: <a href="https://aiweekly.co/alerts/zai-ships-glm-54-a-750b-loop-transformer-that-runs-28-of-78-layers-twice" target="_blank">AI Weekly</a> | <a href="https://simonwillison.net/2026/Nov/23/glm-54/" target="_blank">Simon Willison</a></p>
+
+        <p><strong>2. Anthropic publie une preuve Claude-auteur de VP ≠ VNP, non vérifiée</strong></p>
+        <p>Papier de 70 pages "VP ≠ VNP over every field", modèle de recherche Claude interne comme auteur unique. Formalisation Lean 4 (324 fichiers), vérifications automatisées passées, mais aucun mathématicien humain n'a encore examiné le papier. Borne quasipolynomiale ~m^(c(log m)^(1/3)).</p>
+        <p class="source">Sources: <a href="https://aiweekly.co/alerts/anthropic-posts-claude-authored-vp-vnp-proof-unverified" target="_blank">AI Weekly</a> | <a href="https://www.explainx.ai/catch-up-on-ai/2026-11-24" target="_blank">explainx.ai</a></p>
+
+        <p><strong>3. OpenAI + Cisco lancent Shirudo, bouclier eBPF contre les exploits Linux</strong></p>
+        <p>Outil qui bloque les exploits Linux avec des boucliers eBPF temporaires au niveau du noyau, sans modification du noyau. Réponse directe aux menaces RCE sur les workloads d'inférence et d'agents IA.</p>
+        <p class="source">Sources: <a href="https://aitoolsrecap.com/Blog/ai-news-november-24-2026" target="_blank">AIToolsRecap</a> | <a href="https://aiweekly.co/ai-news-today" target="_blank">AI Weekly</a></p>
+
+        <p><strong>4. Anthropic lance Claude Ship — agent de révision de pull requests</strong></p>
+        <p>Agent d'ingénierie logicielle qui révise les PRs, corrige le code et peut les approuver. Opère directement dans le flux de développement, analyse les diffs, propose des corrections, prend des décisions d'approbation.</p>
+        <p class="source">Sources: <a href="https://aitoolsrecap.com/Blog/ai-news-november-24-2026" target="_blank">AIToolsRecap</a></p>
+
+        <p><strong>5. Virginia et Oregon poursuivent SpaceX, X Corp. et xAI</strong></p>
+        <p>Poursuite du 24 novembre 2026 concernant les générations d'images produites par Grok. Sorties du modèle d'image de xAI accusées de contenus problématiques ou non conformes aux régulations étatiques.</p>
+        <p class="source">Sources: <a href="https://aitoolsrecap.com/Blog/ai-news-november-24-2026" target="_blank">AIToolsRecap</a> | <a href="https://www.explainx.ai/news" target="_blank">explainx.ai</a></p>
+
+        <h3>🔓 2. Veille Modèles Open Source & Open Weights</h3>
+
+        <p><strong>1. Inkling 2 Mini — Thinking Machines Lab, Apache 2.0, tourne sur un laptop</strong></p>
+        <p>Modèle multimodal généraliste (texte + images → texte), Apache 2.0. Petit frère d'Inkling 2 Small. Ollama 0.40.17 (sorti vendredi 20 nov) le supporte sur Apple Silicon. Architecture à boucles (looped transformer), inférence locale.</p>
+        <p class="source">Sources: <a href="https://ai-eng-digest.vercel.app/" target="_blank">AI Engineering Digest</a> | <a href="https://huggingface.co/thinkingmachines/Inkling-2-Mini" target="_blank">Hugging Face</a></p>
+
+        <p><strong>2. marvy-2-35B-MoE-GGUF — MoE 35B-A3B, Apache-2.0</strong></p>
+        <p>Mixture-of-Experts 35B totaux / ~3B actifs par token. Fine-tuné pour le cycle de livraison ServiceNow. Quantisations GGUF pour llama.cpp, Ollama, LM Studio. Construit avec Qwen3.5 (Apache-2.0).</p>
+        <p class="source">Source: <a href="https://huggingface.co/MainStack/marvy-2-35B-MoE-GGUF" target="_blank">Hugging Face</a></p>
+
+        <p><strong>3. PrunedHub GPT-OSS-20B-28x — pruning 12,5% des experts MoE</strong></p>
+        <p>Pruning sans perte de 12,5% des experts MoE (28 sur 32) de gpt-oss-20B. ~17,5B totaux, 3,6B actifs, 24 couches MoE, Top-4 routing, 128K contexte. Qualité nulle perdue.</p>
+        <p class="source">Source: <a href="https://huggingface.co/GOBA-AI-Labs/PrunedHub-GPT-OSS-20B-28x" target="_blank">Hugging Face</a></p>
+
+        <p><strong>4. DeepSeek-MoE-16B Q4_K_M — offload CPU, 11GB</strong></p>
+        <p>Quantisation Q4_K_M (4-bit) de DeepSeek-MoE-16B avec offload CPU des experts MoE via Rust pour llama.cpp. 11 GB (depuis 31 GB F16). Apache 2.0.</p>
+        <p class="source">Source: <a href="https://huggingface.co/MikeKuykendall/deepseek-moe-16b-q4-k-m-cpu-offload-gguf" target="_blank">Hugging Face</a></p>
+
+        <p><strong>5. TML-d24-varloop-research — boucles variables d'Inkling 2 Mini</strong></p>
+        <p>Contrepartie à boucles variables : le nombre de boucles peut être choisi au moment de l'inférence (vs nombre fixe pour Inkling 2 Mini). Poids ouverts pour la recherche sur les modèles bouclés.</p>
+        <p class="source">Source: <a href="https://huggingface.co/thinkingmachines/TML-d24-varloop-research" target="_blank">Hugging Face</a></p>
+      </div>
+    </div>
+
+    <footer>
+      Rapports générés automatiquement par Nod · Veille IA quotidienne · <a href="https://github.com/sanma88/news-ai" target="_blank">Voir le repo GitHub</a>
+    </footer>
+  </div>
+
+  <script>
+    function toggleReport(card) {
+      const detail = card.querySelector('.report-detail');
+      const btn = card.querySelector('.toggle-btn');
+      detail.classList.toggle('active');
+      btn.textContent = detail.classList.contains('active') ? 'Masquer' : 'Lire le rapport';
+    }
+  </script>
 </body>
 </html>
