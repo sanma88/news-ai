@@ -6,12 +6,11 @@
   <title>Veille IA — Rapports quotidiens</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    
+
     :root {
       --bg: #0a0e1a;
       --surface: #111827;
-      --card: #1a2236;
-      --card-hover: #1f2b45;
+      --card: #141c30;
       --accent: #6366f1;
       --accent-glow: rgba(99, 102, 241, 0.3);
       --text: #e2e8f0;
@@ -20,7 +19,6 @@
       --border: #1e293b;
       --green: #10b981;
       --orange: #f59e0b;
-      --red: #ef4444;
     }
 
     body {
@@ -32,14 +30,14 @@
     }
 
     .container {
-      max-width: 1000px;
+      max-width: 900px;
       margin: 0 auto;
       padding: 0 24px;
     }
 
     /* Header */
     header {
-      padding: 60px 0 40px;
+      padding: 56px 0 28px;
       text-align: center;
       position: relative;
     }
@@ -47,11 +45,11 @@
     header::before {
       content: '';
       position: absolute;
-      top: -100px;
+      top: -80px;
       left: 50%;
       transform: translateX(-50%);
       width: 600px;
-      height: 400px;
+      height: 360px;
       background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
       pointer-events: none;
     }
@@ -65,11 +63,11 @@
       color: var(--accent);
       padding: 6px 16px;
       border-radius: 100px;
-      font-size: 0.85em;
+      font-size: 0.82em;
       font-weight: 600;
       letter-spacing: 0.5px;
       text-transform: uppercase;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     .badge .dot {
@@ -86,20 +84,20 @@
     }
 
     h1 {
-      font-size: 3em;
+      font-size: 2.8em;
       font-weight: 800;
       background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       letter-spacing: -1px;
     }
 
     .subtitle {
       color: var(--text-muted);
-      font-size: 1.15em;
-      max-width: 600px;
+      font-size: 1.1em;
+      max-width: 620px;
       margin: 0 auto;
     }
 
@@ -107,14 +105,11 @@
     .stats {
       display: flex;
       justify-content: center;
-      gap: 40px;
-      padding: 30px 0;
-      margin-top: 30px;
+      gap: 48px;
+      padding: 28px 0 10px;
     }
 
-    .stat {
-      text-align: center;
-    }
+    .stat { text-align: center; }
 
     .stat-value {
       font-size: 2em;
@@ -123,34 +118,39 @@
     }
 
     .stat-label {
-      font-size: 0.8em;
+      font-size: 0.78em;
       color: var(--text-dim);
       text-transform: uppercase;
       letter-spacing: 1px;
       margin-top: 4px;
     }
 
-    /* Reports section */
+    /* Section title */
     .section-title {
-      font-size: 1.5em;
+      font-size: 1.4em;
       font-weight: 700;
-      margin: 50px 0 24px;
-      padding-left: 16px;
+      margin: 40px 0 20px;
+      padding-left: 14px;
       border-left: 4px solid var(--accent);
     }
 
+    /* ===== Report card (full width, always readable) ===== */
     .report-card {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 28px 32px;
-      margin-bottom: 20px;
-      transition: all 0.3s ease;
+      padding: 32px 36px;
+      margin-bottom: 24px;
       position: relative;
       overflow: hidden;
     }
 
-    .report-card::before {
+    .report-card.latest {
+      border-color: rgba(99, 102, 241, 0.4);
+      box-shadow: 0 4px 24px rgba(99, 102, 241, 0.12);
+    }
+
+    .report-card.latest::before {
       content: '';
       position: absolute;
       top: 0;
@@ -158,124 +158,125 @@
       width: 4px;
       height: 100%;
       background: linear-gradient(180deg, var(--accent), #8b5cf6);
-      opacity: 0;
-      transition: opacity 0.3s ease;
     }
 
-    .report-card.latest {
-      border-color: rgba(99, 102, 241, 0.4);
-      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.1);
-    }
-
-    .report-card.latest::before {
-      opacity: 1;
-    }
-
-    .report-card:hover {
-      background: var(--card-hover);
-      border-color: rgba(99, 102, 241, 0.4);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(99, 102, 241, 0.15);
-    }
-
-    .report-header {
+    .report-meta {
       display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 16px;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
     }
 
     .report-date {
       font-size: 0.85em;
       color: var(--text-dim);
       font-weight: 600;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
     }
 
-    .report-date.today {
-      color: var(--accent);
-    }
-
-    .report-title {
-      font-size: 1.35em;
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
-
-    .report-summary {
-      color: var(--text-muted);
-      font-size: 0.95em;
-      line-height: 1.8;
-    }
-
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 16px;
-    }
+    .report-date.today { color: var(--accent); }
 
     .tag {
       background: rgba(99, 102, 241, 0.12);
       color: #a5b4fc;
-      padding: 4px 12px;
+      padding: 3px 11px;
       border-radius: 6px;
-      font-size: 0.8em;
+      font-size: 0.78em;
       font-weight: 500;
     }
-
     .tag.green { background: rgba(16, 185, 129, 0.12); color: #6ee7b7; }
     .tag.orange { background: rgba(245, 158, 11, 0.12); color: #fcd34d; }
 
-    /* Report detail */
-    .report-detail {
-      display: none;
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 1px solid var(--border);
+    .report-title {
+      font-size: 1.5em;
+      font-weight: 700;
+      margin-bottom: 8px;
     }
 
-    .report-detail.active {
-      display: block;
-    }
-
-    .report-detail h3 {
+    /* ===== Article list (always visible, no toggle) ===== */
+    .report-body h2 {
       color: var(--accent);
-      font-size: 1.1em;
-      margin: 20px 0 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-size: 1.25em;
+      margin: 26px 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
     }
 
-    .report-detail p {
-      color: var(--text-muted);
-      font-size: 0.92em;
-      margin-bottom: 10px;
-    }
-
-    .report-detail strong {
+    .report-body h3 {
       color: var(--text);
+      font-size: 1.05em;
+      margin: 22px 0 10px;
+      font-weight: 700;
     }
 
-    .report-detail .source {
-      color: var(--text-dim);
-      font-size: 0.82em;
-      margin-bottom: 16px;
-      padding-left: 12px;
-      border-left: 2px solid var(--border);
+    .report-body p {
+      color: var(--text-muted);
+      font-size: 0.95em;
+      margin-bottom: 12px;
     }
 
-    .report-detail a {
+    .report-body strong { color: var(--text); }
+
+    .report-body a {
       color: var(--accent);
       text-decoration: none;
     }
 
-    .report-detail a:hover {
-      text-decoration: underline;
+    .report-body a:hover { text-decoration: underline; }
+
+    .report-body hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 24px 0;
     }
 
-    /* Loading & error states */
+    .report-body code {
+      background: rgba(99, 102, 241, 0.1);
+      color: #a5b4fc;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.88em;
+    }
+
+    /* Older reports: compact accordion */
+    .report-card.older {
+      padding: 0;
+    }
+
+    .older-toggle {
+      width: 100%;
+      background: none;
+      border: none;
+      color: var(--text);
+      padding: 20px 28px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: inherit;
+      font-size: 1.05em;
+      font-weight: 600;
+    }
+
+    .older-toggle:hover { background: rgba(99, 102, 241, 0.05); }
+
+    .older-toggle .chevron {
+      transition: transform 0.3s ease;
+      color: var(--text-dim);
+    }
+
+    .older-toggle.open .chevron { transform: rotate(180deg); }
+
+    .older-body {
+      display: none;
+      padding: 0 28px 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .older-body.open { display: block; }
+
+    /* Loading & empty states */
     .loading {
       text-align: center;
       padding: 40px 0;
@@ -292,9 +293,7 @@
       margin: 0 auto 16px;
     }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     .no-report {
       text-align: center;
@@ -308,50 +307,25 @@
       color: var(--text-muted);
     }
 
-    .no-report p {
-      font-size: 0.95em;
-    }
-
     /* Footer */
     footer {
-      margin-top: 60px;
-      padding: 30px 0;
+      margin-top: 50px;
+      padding: 28px 0;
       border-top: 1px solid var(--border);
       text-align: center;
       color: var(--text-dim);
       font-size: 0.85em;
     }
 
-    footer a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
-
-    /* Toggle button */
-    .toggle-btn {
-      background: none;
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      padding: 6px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.85em;
-      transition: all 0.2s ease;
-    }
-
-    .toggle-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
 
     @media (max-width: 600px) {
       h1 { font-size: 2em; }
-      .stats { gap: 20px; flex-wrap: wrap; }
-      .report-header { flex-direction: column; gap: 8px; }
+      .stats { gap: 24px; }
+      .report-card { padding: 24px 20px; }
+      .older-toggle { padding: 18px 20px; }
+      .older-body { padding: 0 20px 20px; }
     }
   </style>
 </head>
@@ -361,7 +335,7 @@
       <div class="badge"><span class="dot"></span> Automatisation par Nod</div>
       <h1>Veille IA</h1>
       <p class="subtitle">Briefing technique quotidien sur l'actualité de l'Intelligence Artificielle — modèles propriétaires et open source/open weight. Fenêtre stricte des 24-36 dernières heures.</p>
-      <div class="stats" id="stats">
+      <div class="stats">
         <div class="stat">
           <div class="stat-value" id="stat-reports">–</div>
           <div class="stat-label">Rapports publiés</div>
@@ -378,7 +352,6 @@
     </header>
 
     <h2 class="section-title">Rapports</h2>
-
     <div id="reports-list">
       <div class="loading">
         <div class="spinner"></div>
@@ -394,29 +367,38 @@
   <script>
     // ===== Markdown to HTML converter =====
     function markdownToHtml(md) {
-      let html = md
+      // HTML-escape first
+      let text = md
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+
+      // Protect URLs in links before processing
+      text = text
         .replace(/^### (.*$)/gm, '<h3>$1</h3>')
         .replace(/^## (.*$)/gm, '<h2>$1</h2>')
-        .replace(/^# (.*$)/gm, '<h1>$1</h1>')
+        .replace(/^# (.*$)/gm, '<h2>$1</h2>')
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/`([^`]+)`/g, '<code>$1</code>')
-        .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>')
-        .replace(/^---$/gm, '<hr>')
+        .replace(/\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+        .replace(/^---+$/gm, '<hr>')
         .replace(/^(\d+)\. /gm, '<strong>$1. </strong>')
-        .replace(/^(?!\s)(?!\n)([^#\*\[\-<])/gm, '<p>$1</p>');
-      
-      // Wrap paragraphs that aren't already wrapped
-      html = html
-        .split('\n\n')
-        .map(block => {
-          block = block.trim();
-          if (!block) return '';
-          if (block.startsWith('<h') || block.startsWith('<hr') || block.startsWith('<p>') || block.startsWith('<strong>')) return block;
-          return '<p>' + block.replace(/\n/g, '<br>') + '</p>';
+        .replace(/^\* /gm, '<strong>&bull;</strong> ');
+
+      // Wrap loose paragraphs
+      text = text
+        .split('\n')
+        .map(line => {
+          const t = line.trim();
+          if (!t) return '';
+          if (/^<(h\d|hr|strong|a|code|p)/.test(t)) return t + '\n';
+          return '<p>' + t + '</p>\n';
         })
-        .join('\n');
-      
-      return html;
+        .join('\n')
+        .replace(/(<\/p>)\s*(<p>)/g, '</p>$2');
+
+      // Merge consecutive <strong> lines into list-like items
+      return text;
     }
 
     // ===== Date formatting =====
@@ -433,33 +415,22 @@
       return d.getDate() + ' ' + mois[d.getMonth()] + ' ' + d.getFullYear();
     }
 
-    // ===== Get today's date in YYYY-MM-DD format =====
     function getTodayISO() {
       const now = new Date();
-      const y = now.getFullYear();
-      const m = String(now.getMonth() + 1).padStart(2, '0');
-      const d = String(now.getDate()).padStart(2, '0');
-      return `${y}-${m}-${d}`;
+      return now.getFullYear() + '-' +
+        String(now.getMonth() + 1).padStart(2, '0') + '-' +
+        String(now.getDate()).padStart(2, '0');
     }
 
-    // ===== Try to find a report for a given date =====
+    // ===== Fetch a report for a given date =====
     async function fetchReport(dateStr) {
       try {
-        const res = await fetch(`rapports/${dateStr}.md`);
-        if (res.ok) {
-          return await res.text();
-        }
+        const res = await fetch('rapports/' + dateStr + '.md', { cache: 'no-store' });
+        if (res.ok) return await res.text();
         return null;
       } catch (e) {
         return null;
       }
-    }
-
-    // ===== Extract summary from markdown =====
-    function extractSummary(md) {
-      // Look for bold titles at the start of numbered items
-      const matches = md.match(/\*\*[\d]+\. (.+?)\*\*/g) || [];
-      return matches.slice(0, 6).map(m => m.replace(/\*\*[\d]+\. /, '').replace(/\*\*/, '')).join(' · ');
     }
 
     // ===== Extract article count =====
@@ -468,59 +439,63 @@
       return matches.length;
     }
 
-    // ===== Render report card =====
-    function renderReportCard(dateStr, markdown, isLatest) {
-      const summary = extractSummary(markdown);
+    // ===== Render latest report (full, always visible) =====
+    function renderLatestReport(dateStr, markdown) {
       const articleCount = countArticles(markdown);
-      const detailHtml = markdownToHtml(markdown);
       const isToday = dateStr === getTodayISO();
+      const html = markdownToHtml(markdown);
 
       return `
-        <div class="report-card ${isLatest ? 'latest' : ''}">
-          <div class="report-header">
-            <div>
-              <div class="report-date ${isToday ? 'today' : ''}">${isToday ? 'AUJOURD\'HUI \u2014 ' : ''}${formatDate(dateStr)}</div>
-              <div class="report-title">Veille IA — ${formatDateShort(dateStr)}</div>
-            </div>
-            <button class="toggle-btn" onclick="toggleReport(this)">Lire le rapport</button>
-          </div>
-          ${summary ? `<div class="report-summary">${summary}</div>` : ''}
-          <div class="tags">
+        <div class="report-card latest">
+          <div class="report-meta">
+            <span class="report-date ${isToday ? 'today' : ''}">${isToday ? 'AUJOURD\u2019HUI \u2014 ' : ''}${formatDate(dateStr)}</span>
             <span class="tag">IA</span>
             <span class="tag green">Open Source</span>
             <span class="tag orange">SecOps</span>
+            <span class="tag">${articleCount} actus</span>
           </div>
-          <div class="report-detail">
-            ${detailHtml}
-          </div>
+          <div class="report-title">Veille IA — ${formatDateShort(dateStr)}</div>
+          <div class="report-body">${html}</div>
         </div>
       `;
     }
 
-    // ===== Toggle report detail =====
-    function toggleReport(btn) {
-      const card = btn.closest('.report-card');
-      const detail = card.querySelector('.report-detail');
-      detail.classList.toggle('active');
-      btn.textContent = detail.classList.contains('active') ? 'Masquer' : 'Lire le rapport';
+    // ===== Render older reports (collapsed accordion) =====
+    function renderOlderReport(dateStr, markdown, idx) {
+      const html = markdownToHtml(markdown);
+      const id = 'older-' + idx;
+      return `
+        <div class="report-card older">
+          <button class="older-toggle" onclick="toggleOlder(this, '${id}')">
+            <span>Veille IA — ${formatDateShort(dateStr)}</span>
+            <span class="chevron">&#9662;</span>
+          </button>
+          <div class="older-body" id="${id}">${html}</div>
+        </div>
+      `;
     }
 
-    // ===== Load reports for the last 14 days =====
+    function toggleOlder(btn, id) {
+      const body = document.getElementById(id);
+      body.classList.toggle('open');
+      btn.classList.toggle('open');
+    }
+
+    // ===== Load reports =====
     async function loadReports() {
       const list = document.getElementById('reports-list');
       const today = new Date();
       const reports = [];
-      
-      // Try today and the last 13 days
+
       for (let i = 0; i < 14; i++) {
         const d = new Date(today);
         d.setDate(d.getDate() - i);
-        const dateStr = d.toISOString().split('T')[0];
-        
+        const dateStr = d.getFullYear() + '-' +
+          String(d.getMonth() + 1).padStart(2, '0') + '-' +
+          String(d.getDate()).padStart(2, '0');
+
         const md = await fetchReport(dateStr);
-        if (md) {
-          reports.push({ date: dateStr, markdown: md });
-        }
+        if (md) reports.push({ date: dateStr, markdown: md });
       }
 
       if (reports.length === 0) {
@@ -528,27 +503,25 @@
           <div class="no-report">
             <h3>Aucun rapport disponible</h3>
             <p>Le premier rapport sera publié demain à 8h00.</p>
-            <p style="margin-top: 8px; font-size: 0.85em; color: var(--text-dim);">
-              Les rapports sont générés automatiquement chaque matin à 8h (heure de Bruxelles).
-            </p>
           </div>
         `;
         return;
       }
 
-      // Sort: newest first
       reports.sort((a, b) => b.date.localeCompare(a.date));
 
-      // Render cards
-      list.innerHTML = reports.map((r, idx) => renderReportCard(r.date, r.markdown, idx === 0)).join('');
+      // Latest report: full display. Older: collapsed.
+      let html = renderLatestReport(reports[0].date, reports[0].markdown);
+      for (let i = 1; i < reports.length; i++) {
+        html += renderOlderReport(reports[i].date, reports[i].markdown, i);
+      }
+      list.innerHTML = html;
 
-      // Update stats
       const totalArticles = reports.reduce((sum, r) => sum + countArticles(r.markdown), 0);
       document.getElementById('stat-reports').textContent = reports.length;
       document.getElementById('stat-articles').textContent = totalArticles;
     }
 
-    // ===== Initialize =====
     loadReports();
   </script>
 </body>
