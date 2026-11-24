@@ -11,12 +11,14 @@
       --bg: #0a0e1a;
       --surface: #111827;
       --card: #141c30;
+      --card-hover: #1a2340;
       --accent: #6366f1;
       --accent-glow: rgba(99, 102, 241, 0.3);
       --text: #e2e8f0;
       --text-muted: #94a3b8;
       --text-dim: #64748b;
       --border: #1e293b;
+      --border-light: #2a3750;
       --green: #10b981;
       --orange: #f59e0b;
     }
@@ -30,7 +32,7 @@
     }
 
     .container {
-      max-width: 900px;
+      max-width: 880px;
       margin: 0 auto;
       padding: 0 24px;
     }
@@ -60,10 +62,10 @@
       gap: 8px;
       background: rgba(99, 102, 241, 0.15);
       border: 1px solid rgba(99, 102, 241, 0.3);
-      color: var(--accent);
+      color: #a5b4fc;
       padding: 6px 16px;
       border-radius: 100px;
-      font-size: 0.82em;
+      font-size: 0.8em;
       font-weight: 600;
       letter-spacing: 0.5px;
       text-transform: uppercase;
@@ -96,8 +98,8 @@
 
     .subtitle {
       color: var(--text-muted);
-      font-size: 1.1em;
-      max-width: 620px;
+      font-size: 1.05em;
+      max-width: 600px;
       margin: 0 auto;
     }
 
@@ -118,7 +120,7 @@
     }
 
     .stat-label {
-      font-size: 0.78em;
+      font-size: 0.75em;
       color: var(--text-dim);
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -127,154 +129,217 @@
 
     /* Section title */
     .section-title {
-      font-size: 1.4em;
+      font-size: 1.35em;
       font-weight: 700;
-      margin: 40px 0 20px;
+      margin: 40px 0 18px;
       padding-left: 14px;
       border-left: 4px solid var(--accent);
     }
 
-    /* ===== Report card (full width, always readable) ===== */
-    .report-card {
+    /* ===== Report (accordion) ===== */
+    .report {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 32px 36px;
-      margin-bottom: 24px;
-      position: relative;
+      border-radius: 14px;
+      margin-bottom: 16px;
       overflow: hidden;
+      transition: border-color 0.25s ease;
     }
 
-    .report-card.latest {
-      border-color: rgba(99, 102, 241, 0.4);
-      box-shadow: 0 4px 24px rgba(99, 102, 241, 0.12);
+    .report.latest {
+      border-color: rgba(99, 102, 241, 0.45);
+      box-shadow: 0 4px 24px rgba(99, 102, 241, 0.1);
     }
 
-    .report-card.latest::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 4px;
-      height: 100%;
-      background: linear-gradient(180deg, var(--accent), #8b5cf6);
-    }
+    .report.latest:hover { border-color: rgba(99, 102, 241, 0.7); }
 
-    .report-meta {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 18px;
-      flex-wrap: wrap;
-    }
-
-    .report-date {
-      font-size: 0.85em;
-      color: var(--text-dim);
-      font-weight: 600;
-      letter-spacing: 0.3px;
-    }
-
-    .report-date.today { color: var(--accent); }
-
-    .tag {
-      background: rgba(99, 102, 241, 0.12);
-      color: #a5b4fc;
-      padding: 3px 11px;
-      border-radius: 6px;
-      font-size: 0.78em;
-      font-weight: 500;
-    }
-    .tag.green { background: rgba(16, 185, 129, 0.12); color: #6ee7b7; }
-    .tag.orange { background: rgba(245, 158, 11, 0.12); color: #fcd34d; }
-
-    .report-title {
-      font-size: 1.5em;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    /* ===== Article list (always visible, no toggle) ===== */
-    .report-body h2 {
-      color: var(--accent);
-      font-size: 1.25em;
-      margin: 26px 0 14px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .report-body h3 {
-      color: var(--text);
-      font-size: 1.05em;
-      margin: 22px 0 10px;
-      font-weight: 700;
-    }
-
-    .report-body p {
-      color: var(--text-muted);
-      font-size: 0.95em;
-      margin-bottom: 12px;
-    }
-
-    .report-body strong { color: var(--text); }
-
-    .report-body a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    .report-body a:hover { text-decoration: underline; }
-
-    .report-body hr {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 24px 0;
-    }
-
-    .report-body code {
-      background: rgba(99, 102, 241, 0.1);
-      color: #a5b4fc;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 0.88em;
-    }
-
-    /* Older reports: compact accordion */
-    .report-card.older {
-      padding: 0;
-    }
-
-    .older-toggle {
+    /* Clickable header / vignette */
+    .report-toggle {
       width: 100%;
       background: none;
       border: none;
       color: var(--text);
-      padding: 20px 28px;
+      padding: 22px 26px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      gap: 16px;
+      text-align: left;
       font-family: inherit;
-      font-size: 1.05em;
-      font-weight: 600;
     }
 
-    .older-toggle:hover { background: rgba(99, 102, 241, 0.05); }
+    .report-toggle:hover { background: rgba(99, 102, 241, 0.04); }
 
-    .older-toggle .chevron {
+    .report-toggle .chevron {
+      flex-shrink: 0;
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: rgba(99, 102, 241, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 0.85em;
       transition: transform 0.3s ease;
-      color: var(--text-dim);
     }
 
-    .older-toggle.open .chevron { transform: rotate(180deg); }
+    .report.open .report-toggle .chevron { transform: rotate(90deg); }
 
-    .older-body {
-      display: none;
-      padding: 0 28px 24px;
+    .report-info { flex: 1; min-width: 0; }
+
+    .report-headline {
+      font-size: 1.08em;
+      font-weight: 700;
+      margin-bottom: 3px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .today-pill {
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.7em;
+      font-weight: 700;
+      padding: 2px 9px;
+      border-radius: 5px;
+      letter-spacing: 0.4px;
+    }
+
+    .report-sub {
+      font-size: 0.85em;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .report-count {
+      flex-shrink: 0;
+      font-size: 0.85em;
+      color: var(--text-dim);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* ===== Report body (content) ===== */
+    .report-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+
+    .report.open .report-content {
+      max-height: 6000px;
+    }
+
+    .report-inner {
+      padding: 4px 26px 28px;
       border-top: 1px solid var(--border);
     }
 
-    .older-body.open { display: block; }
+    /* ===== Markdown styling ===== */
+    .md h2 {
+      color: var(--accent);
+      font-size: 1.2em;
+      margin: 24px 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      font-weight: 700;
+    }
+
+    .md h2:first-child { margin-top: 12px; }
+
+    .md h3 {
+      color: var(--text);
+      font-size: 1em;
+      margin: 18px 0 8px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .md h3 .num {
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .md p {
+      color: var(--text-muted);
+      font-size: 0.92em;
+      margin-bottom: 10px;
+    }
+
+    .md p.meta {
+      font-size: 0.82em;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+
+    .md strong { color: var(--text); font-weight: 600; }
+
+    .md a {
+      color: #818cf8;
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    .md a:hover { text-decoration: underline; }
+
+    .md hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 22px 0;
+    }
+
+    .md em { color: var(--text-dim); font-style: italic; }
+
+    .md code {
+      background: rgba(99, 102, 241, 0.12);
+      color: #a5b4fc;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-family: 'SF Mono', Monaco, Consolas, monospace;
+    }
+
+    /* Source line */
+    .md p.source {
+      font-size: 0.82em;
+      color: var(--text-dim);
+      margin-top: 4px;
+      margin-bottom: 14px;
+    }
+    .md p.source a { color: #6d76a0; }
+
+    /* Tables */
+    .md table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 20px;
+      font-size: 0.9em;
+    }
+
+    .md th {
+      background: rgba(99, 102, 241, 0.1);
+      color: var(--text);
+      text-align: left;
+      padding: 10px 14px;
+      font-weight: 600;
+      border: 1px solid var(--border);
+    }
+
+    .md td {
+      padding: 9px 14px;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    .md td:last-child, .md th:last-child { text-align: right; }
+
+    .md tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
 
     /* Loading & empty states */
     .loading {
@@ -300,12 +365,7 @@
       padding: 60px 0;
       color: var(--text-dim);
     }
-
-    .no-report h3 {
-      font-size: 1.3em;
-      margin-bottom: 12px;
-      color: var(--text-muted);
-    }
+    .no-report h3 { font-size: 1.3em; margin-bottom: 12px; color: var(--text-muted); }
 
     /* Footer */
     footer {
@@ -316,16 +376,15 @@
       color: var(--text-dim);
       font-size: 0.85em;
     }
-
     footer a { color: var(--accent); text-decoration: none; }
     footer a:hover { text-decoration: underline; }
 
     @media (max-width: 600px) {
       h1 { font-size: 2em; }
       .stats { gap: 24px; }
-      .report-card { padding: 24px 20px; }
-      .older-toggle { padding: 18px 20px; }
-      .older-body { padding: 0 20px 20px; }
+      .report-toggle { padding: 18px 18px; }
+      .report-inner { padding: 4px 18px 22px; }
+      .report-count { display: none; }
     }
   </style>
 </head>
@@ -366,53 +425,117 @@
 
   <script>
     // ===== Markdown to HTML converter =====
+    function escapeHtml(s) {
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
     function markdownToHtml(md) {
-      // HTML-escape first
-      let text = md
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
+      const lines = escapeHtml(md).split('\n');
+      const out = [];
+      let inTable = false;
+      let tableRows = [];
 
-      // Protect URLs in links before processing
-      text = text
-        .replace(/^### (.*$)/gm, '<h3>$1</h3>')
-        .replace(/^## (.*$)/gm, '<h2>$1</h2>')
-        .replace(/^# (.*$)/gm, '<h2>$1</h2>')
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/`([^`]+)`/g, '<code>$1</code>')
-        .replace(/\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
-        .replace(/^---+$/gm, '<hr>')
-        .replace(/^(\d+)\. /gm, '<strong>$1. </strong>')
-        .replace(/^\* /gm, '<strong>&bull;</strong> ');
+      function flushTable() {
+        if (!tableRows.length) { inTable = false; return; }
+        // First row = header, second = separator
+        const header = tableRows[0];
+        const body = tableRows.slice(1);
+        let html = '<table><thead><tr>';
+        header.forEach(c => html += '<th>' + inline(c) + '</th>');
+        html += '</tr></thead><tbody>';
+        body.forEach(row => {
+          html += '<tr>';
+          row.forEach(c => html += '<td>' + inline(c) + '</td>');
+          html += '</tr>';
+        });
+        html += '</tbody></table>';
+        out.push(html);
+        tableRows = [];
+        inTable = false;
+      }
 
-      // Wrap loose paragraphs
-      text = text
-        .split('\n')
-        .map(line => {
-          const t = line.trim();
-          if (!t) return '';
-          if (/^<(h\d|hr|strong|a|code|p)/.test(t)) return t + '\n';
-          return '<p>' + t + '</p>\n';
-        })
-        .join('\n')
-        .replace(/(<\/p>)\s*(<p>)/g, '</p>$2');
+      function inline(s) {
+        return s
+          // bold
+          .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+          // italic
+          .replace(/(^|[^*])\*([^*]+?)\*/g, '$1<em>$2</em>')
+          // code
+          .replace(/`([^`]+)`/g, '<code>$1</code>')
+          // markdown links
+          .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+          // bare URLs
+          .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+      }
 
-      // Merge consecutive <strong> lines into list-like items
-      return text;
+      for (let i = 0; i < lines.length; i++) {
+        let line = lines[i];
+        const trimmed = line.trim();
+
+        // Table row
+        if (trimmed.startsWith('|')) {
+          inTable = true;
+          // split by | and drop empty first/last
+          let cells = trimmed.split('|').map(c => c.trim());
+          if (cells[0] === '') cells.shift();
+          if (cells[cells.length - 1] === '') cells.pop();
+          // skip separator rows like |---|---|
+          if (cells.every(c => /^:?-+:?$/.test(c))) continue;
+          tableRows.push(cells);
+          continue;
+        } else if (inTable) {
+          flushTable();
+        }
+
+        if (trimmed === '') { continue; }
+
+        // horizontal rule
+        if (/^---+$/.test(trimmed)) { out.push('<hr>'); continue; }
+
+        // headings
+        if (trimmed.startsWith('### ')) {
+          let h = trimmed.slice(4);
+          // number prefix
+          h = h.replace(/^(\d+)\. /, '<span class="num">$1.</span> ');
+          out.push('<h3>' + inline(h) + '</h3>');
+          continue;
+        }
+        if (trimmed.startsWith('## ')) { out.push('<h2>' + inline(trimmed.slice(3)) + '</h2>'); continue; }
+        if (trimmed.startsWith('# ')) { out.push('<h2>' + inline(trimmed.slice(2)) + '</h2>'); continue; }
+
+        // meta line: "Date : ..." or "Généré le : ..." or "Fenêtre : ..."
+        if (/^(Date|Généré le|Fenêtre)\s*:/i.test(trimmed)) {
+          out.push('<p class="meta">' + inline(trimmed) + '</p>');
+          continue;
+        }
+
+        // source line
+        if (/^Source\s*:/i.test(trimmed)) {
+          out.push('<p class="source">' + inline(trimmed) + '</p>');
+          continue;
+        }
+
+        // normal paragraph
+        out.push('<p>' + inline(trimmed) + '</p>');
+      }
+
+      if (inTable) flushTable();
+      return out.join('\n');
     }
 
     // ===== Date formatting =====
+    const JOURS = ['DIMANCHE','LUNDI','MARDI','MERCREDI','JEUDI','VENDREDI','SAMEDI'];
+    const MOIS = ['JANVIER','FÉVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOÛT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DÉCEMBRE'];
+    const MOIS_S = ['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+
     function formatDate(dateStr) {
       const d = new Date(dateStr + 'T00:00:00');
-      const jours = ['DIMANCHE','LUNDI','MARDI','MERCREDI','JEUDI','VENDREDI','SAMEDI'];
-      const mois = ['JANVIER','FÉVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOÛT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DÉCEMBRE'];
-      return jours[d.getDay()] + ' ' + d.getDate() + ' ' + mois[d.getMonth()] + ' ' + d.getFullYear();
+      return JOURS[d.getDay()] + ' ' + d.getDate() + ' ' + MOIS[d.getMonth()] + ' ' + d.getFullYear();
     }
 
     function formatDateShort(dateStr) {
       const d = new Date(dateStr + 'T00:00:00');
-      const mois = ['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
-      return d.getDate() + ' ' + mois[d.getMonth()] + ' ' + d.getFullYear();
+      return d.getDate() + ' ' + MOIS_S[d.getMonth()] + ' ' + d.getFullYear();
     }
 
     function getTodayISO() {
@@ -433,52 +556,42 @@
       }
     }
 
-    // ===== Extract article count =====
+    // ===== Count articles (numbered ### sub-headers) =====
     function countArticles(md) {
-      const matches = md.match(/^\d+\. \*\*/gm) || [];
+      const matches = md.match(/^###\s+\d+\./gm) || [];
       return matches.length;
     }
 
-    // ===== Render latest report (full, always visible) =====
-    function renderLatestReport(dateStr, markdown) {
+    // ===== Render one report as an accordion =====
+    function renderReport(dateStr, markdown, idx, isLatest) {
       const articleCount = countArticles(markdown);
       const isToday = dateStr === getTodayISO();
       const html = markdownToHtml(markdown);
+      const openClass = isLatest ? 'open' : '';
+      const latestClass = isLatest ? 'latest' : '';
 
       return `
-        <div class="report-card latest">
-          <div class="report-meta">
-            <span class="report-date ${isToday ? 'today' : ''}">${isToday ? 'AUJOURD\u2019HUI \u2014 ' : ''}${formatDate(dateStr)}</span>
-            <span class="tag">IA</span>
-            <span class="tag green">Open Source</span>
-            <span class="tag orange">SecOps</span>
-            <span class="tag">${articleCount} actus</span>
-          </div>
-          <div class="report-title">Veille IA — ${formatDateShort(dateStr)}</div>
-          <div class="report-body">${html}</div>
-        </div>
-      `;
-    }
-
-    // ===== Render older reports (collapsed accordion) =====
-    function renderOlderReport(dateStr, markdown, idx) {
-      const html = markdownToHtml(markdown);
-      const id = 'older-' + idx;
-      return `
-        <div class="report-card older">
-          <button class="older-toggle" onclick="toggleOlder(this, '${id}')">
-            <span>Veille IA — ${formatDateShort(dateStr)}</span>
-            <span class="chevron">&#9662;</span>
+        <div class="report ${latestClass} ${openClass}" id="report-${idx}">
+          <button class="report-toggle" onclick="toggleReport('report-${idx}')">
+            <span class="chevron">&#9656;</span>
+            <span class="report-info">
+              <span class="report-headline">
+                ${isToday ? '<span class="today-pill">AUJOURD\u2019HUI</span>' : ''}
+                Veille IA — ${formatDateShort(dateStr)}
+              </span>
+              <span class="report-sub">${formatDate(dateStr)}</span>
+            </span>
+            <span class="report-count">${articleCount} actus</span>
           </button>
-          <div class="older-body" id="${id}">${html}</div>
+          <div class="report-content">
+            <div class="report-inner md">${html}</div>
+          </div>
         </div>
       `;
     }
 
-    function toggleOlder(btn, id) {
-      const body = document.getElementById(id);
-      body.classList.toggle('open');
-      btn.classList.toggle('open');
+    function toggleReport(id) {
+      document.getElementById(id).classList.toggle('open');
     }
 
     // ===== Load reports =====
@@ -493,7 +606,6 @@
         const dateStr = d.getFullYear() + '-' +
           String(d.getMonth() + 1).padStart(2, '0') + '-' +
           String(d.getDate()).padStart(2, '0');
-
         const md = await fetchReport(dateStr);
         if (md) reports.push({ date: dateStr, markdown: md });
       }
@@ -510,10 +622,9 @@
 
       reports.sort((a, b) => b.date.localeCompare(a.date));
 
-      // Latest report: full display. Older: collapsed.
-      let html = renderLatestReport(reports[0].date, reports[0].markdown);
-      for (let i = 1; i < reports.length; i++) {
-        html += renderOlderReport(reports[i].date, reports[i].markdown, i);
+      let html = '';
+      for (let i = 0; i < reports.length; i++) {
+        html += renderReport(reports[i].date, reports[i].markdown, i, i === 0);
       }
       list.innerHTML = html;
 
